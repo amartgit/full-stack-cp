@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>User Management</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="p-5 bg-light">
+  <div class="container">
+    <h2>👥 User Management</h2>
+
+    <div class="d-flex my-3">
+      <input id="userInput" class="form-control me-2" placeholder="Enter name">
+      <button class="btn btn-primary" onclick="addUser()">Add</button>
+    </div>
+
+    <ul id="userList" class="list-group"></ul>
+
+    <a href="/" class="btn btn-link mt-4">Go to To-Do List</a>
+  </div>
+
+  <script>
+    function fetchUsers() {
+      fetch('/api/users')
+        .then(res => res.json())
+        .then(users => {
+          const ul = document.getElementById('userList');
+          ul.innerHTML = '';
+          users.forEach(user => {
+            const li = document.createElement('li');
+            li.className = 'list-group-item d-flex justify-content-between align-items-center';
+            li.innerHTML = `
+              <span>${user.name}</span>
+              <button class="btn btn-sm btn-danger" onclick="deleteUser(${user.id})">🗑</button>
+            `;
+            ul.appendChild(li);
+          });
+        });
+    }
+
+    function addUser() {
+      const name = document.getElementById('userInput').value.trim();
+      if (!name) return;
+      fetch('/api/users', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name })
+      }).then(() => {
+        document.getElementById('userInput').value = '';
+        fetchUsers();
+      });
+    }
+
+    function deleteUser(id) {
+      fetch(`/api/users/${id}`, { method: 'DELETE' })
+        .then(() => fetchUsers());
+    }
+
+    fetchUsers();
+  </script>
+</body>
+</html>
