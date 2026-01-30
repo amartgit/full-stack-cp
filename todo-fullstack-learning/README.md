@@ -30,6 +30,15 @@ This project intentionally uses **in-memory storage**
 to focus on logic and API flow.
 Database integration is a planned enhancement.
 
+## 📦 Installation (Node Modules Not Included)
+Node modules are intentionally excluded.
+
+### Backend
+```bash
+cd server
+npm install
+npm start
+
 ## 👤 Author
 Amar Tarmale  
 Web Developer | Tech Enthusiast  
